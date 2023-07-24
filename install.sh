@@ -49,6 +49,6 @@ fi
 # Install TA-Lib python wrapper
 sudo pip3 install ta-lib
 
-echo "Setup completed successfully."
+sudo apt install python3-tk python3-tk-dbg
 
 echo "Installation completed."
