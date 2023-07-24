@@ -155,8 +155,15 @@ def show_error(message):
     ok_button = tk.Button(error_window, text="OK", command=error_window.destroy)
     ok_button.pack()
 
+
+# Function to get current positions using Alpaca API
+def get_positions(api):
+    positions = api.list_positions()
+    return positions
+
+
 # Function to sell all stocks for the given symbol
-def sell_all_stocks():
+def sell_all_stocks(position):
     symbol = symbol_entry.get().upper()
     if not symbol:
         show_error("Please enter a stock symbol.")
@@ -168,20 +175,26 @@ def sell_all_stocks():
 
         # Check if the symbol exists in the portfolio
         positions = api.list_positions()
+
+        for position in positions:
+            symbol = position.symbol
+
         stock_exists = any(position.symbol == symbol for position in positions)
 
         if not stock_exists:
             show_error(f"No positions found for symbol: {symbol}")
             return
 
-        # Sell all shares for the given stock symbol
-        api.submit_order(
-            symbol=symbol,
-            qty=account.qty,
-            side='sell',
-            type='market',
-            time_in_force='day'  # Change to 'day' for day order type
-        )
+        if position.qty > 0:
+            # Submit an order to sell all shares of this stock
+            api.submit_order(
+                symbol=position.symbol,
+                qty=position.qty,
+                side='sell',
+                type='market',
+                time_in_force='day'
+            )
+            print(f"Submitted order to sell all shares of {position.symbol}")
 
         show_result(f"Successfully sold all shares for symbol: {symbol}")
 
@@ -338,3 +351,4 @@ update_running = 0
 
 # Start the Tkinter event loop
 main_window.mainloop()
+
