@@ -53,11 +53,11 @@ def fetch_stock_data():
         show_error("Please enter a stock symbol.")
         return
 
-    # Get the number of days from the input box (default to 7 if not specified or invalid)
+    # Get the number of days from the input box (default to 120 if not specified or invalid)
     try:
         num_days = int(days_entry.get())
     except ValueError:
-        num_days = 7
+        num_days = 120
 
     # Calculate the start and end dates based on today's date and the number of days
     today = datetime.today()
@@ -147,7 +147,7 @@ def fetch_stock_data():
 def show_error(message):
     error_window = tk.Toplevel(main_window)
     error_window.title("Error")
-    error_window.geometry("400x100")
+    error_window.geometry("400x250")
 
     error_label = tk.Label(error_window, text=message)
     error_label.pack()
@@ -192,7 +192,7 @@ def sell_all_stocks():
 def show_result(message):
     result_window = tk.Toplevel(main_window)
     result_window.title("Sell Result")
-    result_window.geometry("400x100")
+    result_window.geometry("400x250")
 
     result_label = tk.Label(result_window, text=message)
     result_label.pack()
@@ -242,8 +242,8 @@ def update_stock_prices():
     text_widget.insert('end', f"\nCurrent Price: {current_price:.2f}\n")
     text_widget.insert('end', f"Current Time (Eastern): {current_time_eastern}\n")
 
-    # Schedule the next update after 3 seconds
-    main_window.after(3000, update_stock_prices)
+    # Schedule the next update after just less than 1 second
+    main_window.after(650, update_stock_prices)
 
 
 # Function to clear the text widget
@@ -254,7 +254,7 @@ def clear_text():
 # Create the main window
 main_window = tk.Tk()
 main_window.title("Sell All Owned Shares of a Stock for Alpaca Program")
-main_window.geometry("1000x800")
+main_window.geometry("1300x950")
 
 # Label for the stock symbol entry
 label = tk.Label(
@@ -272,7 +272,7 @@ symbol_entry.focus()
 # Label for the number of days entry
 days_label = tk.Label(
     main_window,
-    text="Number of Days for Data Query (Default: 7):",
+    text="Number of Days for Data Query (Default: 120):",
     anchor='e',
 )
 days_label.pack(side='top', padx=5)
@@ -281,8 +281,8 @@ days_label.pack(side='top', padx=5)
 days_entry = tk.Entry(main_window)
 days_entry.pack(side='top', padx=5)
 
-# Set the default value for number of days to 7
-days_entry.insert(0, '7')
+# Set the default value for number of days to 120
+days_entry.insert(0, '120')
 
 
 # Button to fetch stock data
@@ -331,7 +331,7 @@ clear_button.pack(side="top", padx=5)
 
 # Add an empty label for additional vertical space at the bottom
 empty_label = tk.Label(main_window, text="")
-empty_label.pack(side="bottom", pady=100)
+empty_label.pack(side="bottom", pady=2)
 
 # Global variable to indicate if the stock market update loop is running
 update_running = 0
