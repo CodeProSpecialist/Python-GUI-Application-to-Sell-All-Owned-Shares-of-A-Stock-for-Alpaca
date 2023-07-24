@@ -7,7 +7,7 @@ import alpaca_trade_api as tradeapi
 import os
 import pytz
 
-# Initialize the Alpaca API
+# Initialize the Alpaca API 
 APIKEYID = os.getenv('APCA_API_KEY_ID')
 APISECRETKEY = os.getenv('APCA_API_SECRET_KEY')
 APIBASEURL = os.getenv('APCA_API_BASE_URL')
