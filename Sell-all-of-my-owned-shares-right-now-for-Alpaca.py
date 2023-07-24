@@ -242,8 +242,8 @@ def update_stock_prices():
     text_widget.insert('end', f"\nCurrent Price: {current_price:.2f}\n")
     text_widget.insert('end', f"Current Time (Eastern): {current_time_eastern}\n")
 
-    # Schedule the next update after 5 seconds
-    main_window.after(5000, update_stock_prices)
+    # Schedule the next update after 3 seconds
+    main_window.after(3000, update_stock_prices)
 
 
 # Function to clear the text widget
