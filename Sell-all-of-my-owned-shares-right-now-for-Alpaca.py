@@ -20,9 +20,22 @@ global current_time_eastern
 
 current_time_eastern = datetime.now(pytz.timezone(eastern_zone)).strftime("%A, %b-%d-%Y %H:%M:%S")
 
+global account
+
 global positions
 
+global position
+
+global symbol
+
 positions = api.list_positions()
+
+# Fetch account information from Alpaca
+account = api.get_account()
+
+for position in positions:
+    symbol = position.symbol
+
 
 # Function to get stock data using yfinance
 def get_stock_data_yfinance(symbol, start_date, end_date):
@@ -99,7 +112,8 @@ def fetch_stock_data():
         account_time = convert_to_eastern_time(datetime.now(pytz.utc))  # Corrected the datetime.datetime.now() typo
         text_widget.insert('end', "Account Information:\n")
         text_widget.insert('end', f"{account_time}\n")
-        text_widget.insert('end', f"Day Trade Count: {account.daytrade_count} out of 3 total Day Trades in 5 business days.\n")
+        text_widget.insert('end',
+                           f"Day Trade Count: {account.daytrade_count} out of 3 total Day Trades in 5 business days.\n")
         text_widget.insert('end', f"Current Account Cash: ${float(account.cash):.2f}\n")
         text_widget.insert('end', "--------------------\n")
 
@@ -166,18 +180,7 @@ def get_positions(api):
 
 
 # Function to sell all stocks for the given symbol
-def sell_all_stocks():
-    global position
-
-    # Fetch account information from Alpaca
-    account = api.get_account()
-
-    # Check if the symbol exists in the portfolio
-    positions = api.list_positions()
-
-    for position in positions:
-        symbol = position.symbol
-
+def sell_all_stocks(position):
     symbol = symbol_entry.get().upper()
     if not symbol:
         show_error("Please enter a stock symbol.")
@@ -188,28 +191,26 @@ def sell_all_stocks():
         for position in positions:
             symbol = position.symbol
 
-        stock_exists = any(position.symbol == symbol for position in positions)
+            stock_exists = any(position.symbol == symbol for position in positions)
 
-        if not stock_exists:
-            show_error(f"No positions found for symbol: {symbol}")
-            return
-
-        if position.qty > 0:
-
-            # Submit an order to sell all shares of this stock
-            api.submit_order(
-                symbol=position.symbol,
-                qty=position.qty,
-                side='sell',
-                type='market',
-                time_in_force='day'
-            )
-            print(f"Submitted order to sell all shares of {position.symbol}")
+            if not stock_exists:
+                show_error(f"No positions found for symbol: {symbol}")
+                return
+        
+        api.submit_order(
+            symbol=position.symbol,
+            qty=position.qty,
+            side='sell',
+            type='market',
+            time_in_force='day'
+        )
+        print(f"Submitted order to sell all shares of {position.symbol}")
 
         show_result(f"Successfully sold all shares for symbol: {symbol}")
 
     except Exception as e:
         show_error(f"Error selling stocks: {e}")
+
 
 # Function to display the result of selling stocks in a separate window
 def show_result(message):
@@ -307,7 +308,6 @@ days_entry.pack(side='top', padx=5)
 # Set the default value for number of days to 120
 days_entry.insert(0, '120')
 
-
 # Button to fetch stock data
 fetch_button = tk.Button(
     main_window,
@@ -361,4 +361,3 @@ update_running = 0
 
 # Start the Tkinter event loop
 main_window.mainloop()
-
