@@ -191,7 +191,7 @@ def sell_all_stocks():
     account = api.get_account()
 
     symbol = symbol_entry.get().upper()
-    symbol.qty = position.qty
+    symbol.qty = float(position.qty)
     if not symbol:
         show_error("Please enter a stock symbol.")
         return
