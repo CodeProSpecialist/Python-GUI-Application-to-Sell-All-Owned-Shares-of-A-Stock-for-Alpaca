@@ -4,7 +4,7 @@ This Python application is so new that it is in the beta testing phase for right
 
 Here is a better introduction to this Python Program:
 
-Introducing the "Stock Market Insights with Alpaca" application!
+Introducing the "Stock Market Insights with Alpaca" application! ( better known as: Python-Application-to-Sell-All-Owned-Shares-of-A-Stock-for-Alpaca )
 
 Are you an investor who wants to stay up-to-date with the latest stock market data and make informed decisions? Look no further! With our powerful and user-friendly Python application, you can effortlessly fetch, analyze, and even sell stocks using Alpaca API. Let's take a closer look at what this amazing tool can do for you:
 
