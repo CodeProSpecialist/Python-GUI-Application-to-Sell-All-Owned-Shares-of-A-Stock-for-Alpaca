@@ -20,6 +20,9 @@ global current_time_eastern
 
 current_time_eastern = datetime.now(pytz.timezone(eastern_zone)).strftime("%A, %b-%d-%Y %H:%M:%S")
 
+global positions
+
+positions = api.list_positions()
 
 # Function to get stock data using yfinance
 def get_stock_data_yfinance(symbol, start_date, end_date):
@@ -163,18 +166,24 @@ def get_positions(api):
 
 
 # Function to sell all stocks for the given symbol
-def sell_all_stocks(position):
+def sell_all_stocks():
+    global position
+
+    # Fetch account information from Alpaca
+    account = api.get_account()
+
+    # Check if the symbol exists in the portfolio
+    positions = api.list_positions()
+
+    for position in positions:
+        symbol = position.symbol
+
     symbol = symbol_entry.get().upper()
     if not symbol:
         show_error("Please enter a stock symbol.")
         return
 
     try:
-        # Fetch account information from Alpaca
-        account = api.get_account()
-
-        # Check if the symbol exists in the portfolio
-        positions = api.list_positions()
 
         for position in positions:
             symbol = position.symbol
@@ -186,6 +195,7 @@ def sell_all_stocks(position):
             return
 
         if position.qty > 0:
+
             # Submit an order to sell all shares of this stock
             api.submit_order(
                 symbol=position.symbol,
