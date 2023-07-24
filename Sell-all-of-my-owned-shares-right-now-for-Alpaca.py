@@ -181,6 +181,18 @@ def get_positions(api):
 
 # Function to sell all stocks for the given symbol
 def sell_all_stocks():
+    global position
+    global account
+    global symbol
+
+    positions = api.list_positions()
+
+    # Fetch account information from Alpaca
+    account = api.get_account()
+
+    for position in positions:
+        symbol = position.symbol
+
     symbol = symbol_entry.get().upper()
     if not symbol:
         show_error("Please enter a stock symbol.")
