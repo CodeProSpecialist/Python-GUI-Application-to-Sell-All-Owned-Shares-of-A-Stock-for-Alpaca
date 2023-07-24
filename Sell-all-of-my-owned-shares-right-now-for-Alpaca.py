@@ -181,39 +181,39 @@ def get_positions(api):
 
 # Function to sell all stocks for the given symbol
 def sell_all_stocks():
-    global position
     global account
-    global symbol
 
     positions = api.list_positions()
 
     # Fetch account information from Alpaca
     account = api.get_account()
 
-    symbol = symbol_entry.get().upper()
-    symbol.qty = float(position.qty)
-    if not symbol:
+    symbol_to_sell = symbol_entry.get().upper()
+    if not symbol_to_sell:
         show_error("Please enter a stock symbol.")
         return
 
+    position_to_sell = None
+    for position in positions:
+        if position.symbol == symbol_to_sell:
+            position_to_sell = position
+            break
+
+    if position_to_sell is None:
+        show_error(f"No positions found for symbol: {symbol_to_sell}")
+        return
+
     try:
-
-        stock_exists = any(position.symbol == symbol for position in positions)
-
-        if not stock_exists:
-            show_error(f"No positions found for symbol: {symbol}")
-            return
-
         api.submit_order(
-            symbol=position.symbol,
-            qty=symbol.qty,
+            symbol=symbol_to_sell,
+            qty=float(position_to_sell.qty),
             side='sell',
             type='market',
             time_in_force='day'
         )
-        print(f"Submitted order to sell all shares of {position.symbol}")
+        print(f"Submitted order to sell all shares of {symbol_to_sell}")
 
-        show_result(f"Successfully sold all shares for symbol: {symbol}")
+        show_result(f"Successfully sold all shares for symbol: {symbol_to_sell}")
 
     except Exception as e:
         show_error(f"Error selling stocks: {e}")
