@@ -190,30 +190,23 @@ def sell_all_stocks():
     # Fetch account information from Alpaca
     account = api.get_account()
 
-    for position in positions:
-        symbol = position.symbol
-
     symbol = symbol_entry.get().upper()
+    symbol.qty = position.qty
     if not symbol:
         show_error("Please enter a stock symbol.")
         return
 
     try:
 
-        get_positions(api)
+        stock_exists = any(position.symbol == symbol for position in positions)
 
-        for position in positions:
-            symbol = position.symbol
-
-            stock_exists = any(position.symbol == symbol for position in positions)
-
-            if not stock_exists:
-                show_error(f"No positions found for symbol: {symbol}")
-                return
+        if not stock_exists:
+            show_error(f"No positions found for symbol: {symbol}")
+            return
 
         api.submit_order(
             symbol=position.symbol,
-            qty=position.qty,
+            qty=symbol.qty,
             side='sell',
             type='market',
             time_in_force='day'
