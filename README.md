@@ -8,7 +8,7 @@ Introducing the "Stock Market Insights with Alpaca" application! ( better known 
 
 Are you an investor who wants to stay up-to-date with the latest stock market data and make informed decisions? Look no further! With our powerful and user-friendly Python application, you can effortlessly fetch, analyze, and even sell stocks using Alpaca API. Let's take a closer look at what this amazing tool can do for you:
 
-1. Real-Time Stock Data: Our application fetches real-time stock data using the Yahoo Finance API. Enter any stock symbol, and within seconds, you'll have access to essential information, including the current price, open, close, low, high, and percentage changes for the last 7 days.
+1. Real-Time Stock Data: Our application fetches real-time stock data. Enter any stock symbol, and within seconds, you'll have access to essential information, including the current price, open, close, low, high, and percentage changes for the last 7 days.
 
 2. Bollinger Bands Analysis: We've integrated the incredible Talib library to calculate and display Bollinger Bands for your chosen stock. This tool will help you identify potential price trends and make informed investment decisions.
 
