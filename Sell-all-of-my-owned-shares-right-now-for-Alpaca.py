@@ -180,13 +180,15 @@ def get_positions(api):
 
 
 # Function to sell all stocks for the given symbol
-def sell_all_stocks(position):
+def sell_all_stocks():
     symbol = symbol_entry.get().upper()
     if not symbol:
         show_error("Please enter a stock symbol.")
         return
 
     try:
+
+        get_positions(api)
 
         for position in positions:
             symbol = position.symbol
@@ -196,7 +198,7 @@ def sell_all_stocks(position):
             if not stock_exists:
                 show_error(f"No positions found for symbol: {symbol}")
                 return
-        
+
         api.submit_order(
             symbol=position.symbol,
             qty=position.qty,
