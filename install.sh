@@ -18,6 +18,9 @@ then
     sudo apt install -y python3-pip
 fi
 
+# making sure python3.11 can install packages by renaming EXTERNALLY-MANAGED to EXTERNALLY-MANAGED.old
+sudo mv /usr/lib/python3.11/EXTERNALLY-MANAGED /usr/lib/python3.11/EXTERNALLY-MANAGED.old 
+
 # Install required Python packages using pip3
 sudo pip3 install tk yfinance prettytable TA-Lib alpaca-trade-api pytz 
 
